@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    //JS nao compila, é uma linguagem interpretada
+    "baseUrl": "." //Isso ocorre porque esse arquivo vem do TS, que é compilada.
+  }
+}
