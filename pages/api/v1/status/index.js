@@ -21,6 +21,7 @@ async function status(request, response) {
 
   console.log(databaseOpenedConnectionsResult);
 
+  console.log("teste");
   const databaseOpenedConnectionsValue =
     databaseOpenedConnectionsResult.rows[0].count;
   console.log(databaseOpenedConnectionsValue);
