@@ -1,4 +1,9 @@
 import database from 'infra/database.js';
+import orchestrator from "tests/orchestrator.js"
+
+beforeAll(async () => {
+    await orchestrator.waitForAllServices();
+})
 
 beforeAll(cleanDatabase) //Função beforeAll serve para fazer algo antes de tudo, nesse caso, limpar o DB.
 
