@@ -17,7 +17,7 @@ startWebServ.on("close", (code, signal) => {
 });
 
 process.on("SIGINT", () => {
-  console.log("Voce pressionou Ctrl + C!");
+  console.log("\nVoce pressionou Ctrl + C!");
 
   startWebServ.kill("SIGINT");
 
@@ -32,6 +32,7 @@ process.on("SIGINT", () => {
     console.log("Limpeza concluida. Saindo...");
   } catch (error) {
     console.error("\n Erro durante a limpeza.");
+  } finally {
+    process.exit(0);
   }
-  process.exit(0);
 });
