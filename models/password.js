@@ -1,5 +1,6 @@
 import bcryptjs from "bcryptjs";
 import { createHash } from "node:crypto";
+import { ValidationError } from "infra/errors";
 
 async function hash(pepperedPassword) {
   const rounds = getNumberOfRounds();
@@ -15,6 +16,13 @@ function getNumberOfRounds() {
 }
 
 async function getPepper(password) {
+  if (password === undefined) {
+    throw new ValidationError({
+      message: "Não foi informado a senha do usuario.",
+      action: "Informe uma senha para realizar esta operação.",
+    });
+  }
+  password = password + process.env.HASHPEPPER;
   const hash = createHash("sha-256");
 
   hash.update(password);
