@@ -207,9 +207,8 @@ describe("PATCH /api/v1/users/[username]", () => {
       expect(responseBody.updated_at > responseBody.created_at).toBe(true);
 
       const userInDatabase = await user.findOneByUsername(createdUser.username);
-      const passwordPeppered = await password.getPepper("newPassword2");
       const correctPasswordMatch = await password.compare(
-        passwordPeppered,
+        "newPassword2",
         userInDatabase.password,
       );
 
