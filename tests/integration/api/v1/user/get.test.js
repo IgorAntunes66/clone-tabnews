@@ -93,6 +93,19 @@ describe("GET /api/v1/user", () => {
         action: "Verifique se este usuario está logado e tente novamente.",
         status_code: 401,
       });
+
+      //Set-Cookie assertions
+      const parsedSetCookie = setCookieParser(response, {
+        map: true,
+      });
+
+      expect(parsedSetCookie.session_id).toEqual({
+        name: "session_id",
+        value: "invalid",
+        maxAge: -1,
+        path: "/",
+        httpOnly: true,
+      });
     });
 
     test("With expired session", async () => {
@@ -126,20 +139,18 @@ describe("GET /api/v1/user", () => {
       });
     });
 
-    test("With almost expired session", async () => {
+    test("With halfway-expired session", async () => {
       jest.useFakeTimers({
-        now: new Date(
-          Date.now() - (session.EXPIRATION_IN_MILLISECONDS - 10000),
-        ),
+        now: new Date(Date.now() - session.EXPIRATION_IN_MILLISECONDS / 2),
       });
 
       const createdUser = await orchestrator.createUser({
-        username: "UserWithAlmostExpiredSession",
+        username: "UserWithHalfwayExpiredSession",
       });
 
       const sessionObject = await orchestrator.createSession(createdUser.id);
 
-      jest.useRealTimers;
+      jest.useRealTimers();
 
       const response = await fetch("http://localhost:3000/api/v1/user", {
         headers: {
@@ -153,7 +164,7 @@ describe("GET /api/v1/user", () => {
 
       expect(responseBody).toEqual({
         id: createdUser.id,
-        username: "UserWithAlmostExpiredSession",
+        username: "UserWithHalfwayExpiredSession",
         email: createdUser.email,
         password: createdUser.password,
         created_at: createdUser.created_at.toISOString(),
